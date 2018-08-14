@@ -47,10 +47,13 @@ tracks = [Track(artist, album, title, datetime.strptime(date, "%d %b %Y %H:%M"))
 
 tracks.sort(key=lambda track: track.date)
 
-now = datetime.now()
+today = datetime.now().date()
+last_friday = today - timedelta(days=3+today.weekday())
 
-this_week = [track for track in tracks if datetime.now() - track.date < timedelta(days=7)]
+this_week = [track for track in tracks if track.date.date() >= last_friday]
 this_year = [track for track in tracks if track.date >= datetime.strptime("2018", "%Y")]
+
+print(f"# of tracks this week: {len(this_week)}")
 
 print_tops(this_week, "this week")
 print()
