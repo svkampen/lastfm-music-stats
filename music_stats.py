@@ -27,7 +27,7 @@ def artist_popularity(trackset):
     year_counts = Counter(t.date.year for t in trackset)
 
     for artist in sorted(artists):
-        year_counter = Counter([t.date.year for t in trackset if t.artist == artist])
+        year_counter = Counter(t.date.year for t in trackset if t.artist == artist)
 
         # get most popular year and amount of songs in that year
         mp_year, mp_count = year_counter.most_common(1)[0]
@@ -50,13 +50,24 @@ tracks.sort(key=lambda track: track.date)
 today = datetime.now().date()
 last_friday = today - timedelta(days=3+today.weekday())
 
+current_year = datetime(year=2018,month=1,day=1)
+
 this_week = [track for track in tracks if track.date.date() >= last_friday]
-this_year = [track for track in tracks if track.date >= datetime.strptime("2018", "%Y")]
+this_year = [track for track in tracks if track.date >= current_year]
 
 print(f"# of tracks this week: {len(this_week)}")
 
+unique_artists = len({track.artist for track in this_week})
+
+print(f"# of unique artists this week: {unique_artists}")
+
 print_tops(this_week, "this week")
 print()
+
+print(f"# of tracks this year: {len(this_year)}")
+unique_artists = len({track.artist for track in this_year})
+print(f"# of unique artists this year: {unique_artists}")
+
 print_tops(this_year, "this year")
 
 artist_popularity_map = artist_popularity(tracks)
